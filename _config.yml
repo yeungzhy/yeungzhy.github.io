@@ -159,6 +159,7 @@ content:
 
 
   - title: 工作经历
+    collapsed: true
     layout: list
     content:
       - layout: left
