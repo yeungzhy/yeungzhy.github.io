@@ -2,21 +2,19 @@
 # 站点信息
 # ============================================================
 
-# TODO: 改成你自己的「GitHub 用户名/仓库名」
 # 这个值只用于页面右上角显示 "View on GitHub"，填错不影响页面渲染
-# 当前仓库是 yeungzhy/yeungzhy，所以写 yeungzhy/yeungzhy
-repository: yeungzhy/yeungzhy
+repository: yeungzhy/yeungzhy.github.io
 
-# 如果仓库名改成了 yeungzhy.github.io，下面这行就不用动（留空即可）
-# 如果保持仓库名 yeungzhy，网站地址会是 https://yeungzhy.github.io/yeungzhy/
-# 那么必须取消下面这行注释，否则字体和图标会 404：
-# baseurl: "/yeungzhy"
+# 仓库名是 yeungzhy.github.io，站点在根域名 https://yeungzhy.github.io/
+# 所以 baseurl 保持空。若将来把站点挪到子路径下，才需要取消注释并填写
+# baseurl: "/子路径"
 
 # favicon（已换成你提供的那套，文件在 images/favicon/ 下，一般不用再改）
 favicon: images/favicon/favicon.ico
 
-# 内容配置版本，必须保持 2（新版写法），不要改
-version: 2
+# 原主题用 version 区分新旧两套内容写法（v1/v2），
+# 二开已移除 v1 模板与分支判断，只保留 v2 写法，此配置项不再需要
+# version: 2
 
 # ============================================================
 # 个人信息
@@ -211,7 +209,8 @@ footer_show_references: true
 # 构建设置 —— 以下不要动
 # ============================================================
 
-remote_theme: sproogen/resume-theme
+# 主题文件已全部复制到本地 _sass/_layouts/_includes，不再需要远程主题
+# remote_theme: sproogen/resume-theme
 
 sass:
   sass_dir: _sass

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: 'en' }}">
+
+{%- include head.html -%}
+
+<body>
+
+  <script>
+    // 初始化主题：
+    // 1. 优先读取用户上一次手动选择（localStorage）
+    // 2. 否则按 _config.yml 的 darkmode 配置：
+    //    true => 暗色，"never" => 亮色，false（默认）=> 跟随系统
+    (function () {
+      const storageKey = 'resume-theme-mode';
+      const saved = localStorage.getItem(storageKey);
+      const defaultMode = {{ site.darkmode | jsonify }};
+
+      let mode = saved;
+      if (!mode) {
+        if (defaultMode === true) mode = 'dark';
+        else if (defaultMode === 'never') mode = 'light';
+        else mode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+
+      if (mode === 'dark') {
+        document.body.classList.add('dark');
+      }
+    })();
+  </script>
+
+  {%- include header.html -%}
+
+  <main class="page-content" aria-label="Content">
+    <div class="wrapper">
+
+      {%- if jekyll.environment == 'production' and site.gtm -%}
+        {%- include gtm_body.html -%}
+      {%- endif -%}
+
+      {%- include about.html -%}
+
+      {% for section in site.content %}
+        <div class="container {{ section.layout }}-container">
+          <h3 id="{{ section.title | slugify }}">{{ section.title }}</h3>
+          {% include {{ section.layout | prepend: "section-" | append: ".html" }} content=section.content %}
+        </div>
+      {% endfor %}
+    </div>
+  </main>
+
+  {%- include footer.html -%}
+  <script src="{{ '/assets/js/theme-toggle.js' | relative_url }}"></script>
+</body>
+
+</html>

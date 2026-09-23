@@ -71,6 +71,56 @@ code, pre, kbd, samp {
   font-family: 'Maple Mono', ui-monospace, Menlo, Consolas, monospace;
 }
 
+/* ---- 主题切换按钮 ---- */
+.theme-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: #f0f0f0;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+
+  &:hover {
+    background: #e0e0e0;
+    transform: scale(1.05);
+  }
+
+  &:focus {
+    outline: 2px solid #477dca;
+    outline-offset: 2px;
+  }
+}
+
+.dark .theme-toggle {
+  background: #333;
+  color: #e6e6e6;
+
+  &:hover {
+    background: #444;
+  }
+}
+
+/* 让 header-container 作为按钮定位参照 */
+.header-container {
+  position: relative;
+}
+
+/* 打印时隐藏切换按钮 */
+@media print {
+  .theme-toggle {
+    display: none;
+  }
+}
+
 /* ---- 下面是可选的微调，取消注释即可生效 ---- */
 
 /* 字号整体调大一点（等宽字体视觉上偏小） */
