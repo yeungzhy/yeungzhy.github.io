@@ -1,7 +1,6 @@
 body {
   color: #333;
   font-family: 'Maple Mono', -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
-  font-feature-settings: "kern", "liga", "pnum";
   font-size: 1rem;
   line-height: 1.5;
 
@@ -35,27 +34,44 @@ a:hover {
 color: #355e98;
 }
 
+/* 页头姓名：比正文大一档，是整页最大的文字。
+   margin-bottom 只留 0.2rem —— 下面紧跟的关键词是同一视觉整体的一部分，
+   行距由 .header-profile-text 统一控制（见 _sass/modern-resume-theme.scss）。 */
 h1 {
-  font-size: 4rem;
-  margin-bottom: 0.1rem;
-  font-weight: 500;
-}
-
-h2 {
-  font-weight: 300;
-  font-size: 2rem;
-}
-
-h3 {
-  font-weight: 300;
-  font-size: 3rem;
-  text-align: center;
-  border-bottom: dashed 2px #CCCCCC;
-  padding-bottom: 10px;
-  margin-bottom:40px;
+  font-size: 4.4rem;
+  margin-bottom: 0.2rem;
+  font-weight: 600;
+  line-height: 1.15;
 
   @media print {
-    margin-bottom: 20px;
+    /* 纸上的名字不需要网页那种存在感，收到接近文档标题的量级 */
+    font-size: 2.6rem;
+  }
+}
+
+/* 页头姓名下面那行关键词（职位 / 一句话标签）。
+   字号刻意比 h1 小一大档，形成「大名 + 小注」的层级；
+   屏幕和纸上同值，所以不需要打印覆盖。 */
+h2 {
+  font-weight: 300;
+  font-size: 1.6rem;
+  line-height: 1.35;
+}
+
+/* section 标题：左对齐小字号 + 细实线的文档式排版。
+   原来的居中大字 + 2px 粗虚线是博客排版，和正文的阅读动线不一致。 */
+h3 {
+  font-weight: 500;
+  font-size: 2.2rem;
+  text-align: left;
+  border-bottom: solid 1px #DDDDDD;
+  padding-bottom: 6px;
+  margin-bottom: 2.4rem;
+
+  @media print {
+    margin-bottom: 16px;
+    border-bottom-color: #999;
+    break-after: avoid; /* 标题不孤悬在页尾 */
   }
 }
 
@@ -68,10 +84,6 @@ h4 {
 p, ul {
   font-size: 1.6rem;
   text-align: justify;
-}
-
-a i {
-  font-size:1.6rem;
 }
 
 mark {

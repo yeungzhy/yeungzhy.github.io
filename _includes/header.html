@@ -1,130 +1,106 @@
 <div class="container header-container">
-  <div class="row">
-    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-8 header-left">
-      <h1>{{ site.name | escape }}</h1>
-      <h2>{{ site.title | escape }}</h2>
-    </div>
-    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 header-right">
-      <ul class="icons no-print">
-        {%- if site.dribbble_username -%}
-          <li>
-            <a target="_blank" href="https://dribbble.com/{{ site.dribbble_username| cgi_escape | escape }}" class="button button--sacnite button--round-l">
-              <i class="fab fa-dribbble-square" title="Dribble link"></i>
-            </a>
-          </li>
-        {%- endif -%}
-        {%- if site.facebook_username -%}
-          <li>
-            <a target="_blank" href="https://www.facebook.com/{{ site.facebook_username| cgi_escape | escape }}" class="button button--sacnite button--round-l">
-              <i class="fab fa-facebook" title="Facebook link"></i>
-            </a>
-          </li>
-        {%- endif -%}
-        {%- if site.flickr_username -%}
-          <li>
-            <a target="_blank" href="https://www.flickr.com/photos/{{ site.flickr_username| cgi_escape | escape }}" class="button button--sacnite button--round-l">
-              <i class="fab fa-flickr" title="Flickr link"></i>
-            </a>
-          </li>
-        {%- endif -%}
-        {%- if site.github_username -%}
-          <li>
-            <a target="_blank" href="https://github.com/{{ site.github_username| cgi_escape | escape }}" class="button button--sacnite button--round-l">
-              <i class="fab fa-github" title="Github link"></i>
-            </a>
-          </li>
-        {%- endif -%}
-        {%- if site.stackoverflow_username -%}
-          <li>
-            <a target="_blank" href="https://stackoverflow.com/users/{{ site.stackoverflow_username| cgi_escape | escape }}" class="button button--sacnite button--round-l">
-              <i class="fab fa-stack-overflow" title="Stackoverflow link"></i>
-            </a>
-          </li>
-        {%- endif -%}
-        {%- if site.instagram_username -%}
-          <li>
-            <a target="_blank" href="https://www.instagram.com/{{ site.instagram_username| cgi_escape | escape }}" class="button button--sacnite button--round-l">
-              <i class="fab fa-instagram" title="Instagram link"></i>
-            </a>
-          </li>
-        {%- endif -%}
-        {%- if site.linkedin_username -%}
-          <li>
-            <a target="_blank" href="https://www.linkedin.com/in/{{ site.linkedin_username| cgi_escape | escape }}" class="button button--sacnite button--round-l">
-              <i class="fab fa-linkedin" title="Linkedin link"></i>
-            </a>
-          </li>
-        {%- endif -%}
-        {%- if site.xing_username -%}
-          <li>
-            <a target="_blank" href="https://www.xing.com/profile/{{ site.xing_username| cgi_escape | escape }}" class="button button--sacnite button--round-l">
-              <i class="fab fa-xing" title="Xing link"></i>
-            </a>
-          </li>
-        {%- endif -%}
-        {%- if site.pinterest_username -%}
-          <li>
-            <a target="_blank" href="https://www.pinterest.com/{{ site.pinterest_username| cgi_escape | escape }}" class="button button--sacnite button--round-l">
-              <i class="fab fa-pinterest" title="Pintrest link"></i>
-            </a>
-          </li>
-        {%- endif -%}
-        {%- if site.twitter_username -%}
-          <li>
-            <a target="_blank" href="https://twitter.com/{{ site.twitter_username| cgi_escape | escape }}" class="button button--sacnite button--round-l">
-              <i class="fab fa-twitter" title="Twitter link"></i>
-            </a>
-          </li>
-        {%- endif -%}
-        {%- if site.youtube_username -%}
-          <li>
-            <a target="_blank" href="https://www.youtube.com/{{ site.youtube_username| cgi_escape | escape }}" class="button button--sacnite button--round-l">
-              <i class="fab fa-youtube" title="Youtube link"></i>
-            </a>
-          </li>
-        {%- endif -%}
-        {%- if site.orcid_username -%}
-          <li>
-            <a target="_blank" href="https://orcid.org/{{ site.orcid_username | escape }}" class="button button--sacnite button--round-l">
-              <i class="fab fa-orcid" title="ORCiD link"></i>
-            </a>
-          </li>
-        {%- endif -%}
-        {%- if site.googlescholar_username -%}
-          <li>
-            <a target="_blank" href="https://scholar.google.com/citations?user={{ site.googlescholar_username| escape }}" class="button button--sacnite button--round-l">
-              <i class="fab fa-google" title="Google scholar link"></i>
-            </a>
-          </li>
-        {%- endif -%}
-        {% for link in site.additional_links %}
-          <li>
-            {% include a.html href=link.url class="button button--sacnite button--round-l" %}
-              <i class="{{ link.icon }}" title="{{ link.title | escape }}"></i>
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
+  {%- comment -%}
+    页头两块：身份块（头像 + 姓名 + 关键词）、联系方式行。
+    两块都直接排在 .container 里、左对齐，和正文共用同一条左边界 ——
+    小屏也不居中（居中会让头像缩进一段，和下面的章节标题对不齐）。
 
-      {%- if site.email -%}
-        <p>
-          {{ site.email_title | default: "Email" }}: <a href="mailto:{{ site.email }}" target="_blank">{{ site.email | escape }}</a>
-        </p>
-      {%- endif -%}
-      {%- if site.phone -%}
-        <p>
-          {{ site.phone_title | default: "Phone" }}: {{ site.phone | escape }}
-        </p>
-      {%- endif -%}
-      {%- if site.website -%}
-        <p>
-          {{ site.website_title | default: "Web" }}: {% include a.html href=site.website %}{{ site.website | escape }}</a>
-        </p>
+    头像来自 _config.yml 的 profile_image，没配就不渲染这个 <span>，
+    只剩姓名和关键词。头像带 no-print：纸上不出现。
+  {%- endcomment -%}
+  <div class="header-profile">
+    {%- if site.profile_image -%}
+      <span class="header-avatar no-print" id="header-avatar"
+            style="background-image: url({{ site.profile_image | relative_url }})"></span>
+    {%- endif -%}
+    <div class="header-profile-text">
+      {%- comment -%}
+        姓名包成 <button>：点击收起 / 展开左边的头像，和其它 section 标题
+        同一套机制 —— data-collapse-key 由 assets/js/section-toggle.js 统一
+        接管（点击切换、写 localStorage、同步 aria-expanded），「收起」具体
+        藏什么由 CSS 按 key 决定，见 assets/main.scss 的 avatar 特例。
+
+        没有配头像时不渲染按钮，避免出现点了没反应的控件。
+        和其它标题一样不做任何"可点的样子"：没有箭头、没有 title、
+        悬停也不变色。
+      {%- endcomment -%}
+      <h1>
+        {%- if site.profile_image -%}
+          <button type="button" class="section-toggle"
+                  data-collapse-key="avatar"
+                  aria-expanded="true" aria-controls="header-avatar">{{ site.name | escape }}</button>
+        {%- else -%}
+          {{ site.name | escape }}
+        {%- endif -%}
+      </h1>
+      {%- comment -%}
+        空字符串在 Liquid 里是 truthy，只写 if site.title 的话
+        title: "" 会渲染出一个空行。注释掉和留空都要不显示。
+      {%- endcomment -%}
+      {%- if site.title and site.title != '' -%}
+        <h2>{{ site.title | escape }}</h2>
       {%- endif -%}
     </div>
   </div>
 
-  <button id="theme-toggle" class="theme-toggle" type="button" aria-label="切换深色/浅色主题" title="切换深色/浅色主题">
-    <i class="fas fa-moon" id="theme-icon"></i>
-  </button>
+  {%- comment -%}
+    联系方式 / 社交地址：一行纯文本链接，彼此用一个圆点隔开。
+
+    链接文字不挂 "Email:" 这种前缀，直接写值本身：
+      - 邮箱 / 电话就是地址本身
+      - 网址去掉 https:// 只留域名（href 里仍是完整地址）
+      - 社交链接用 _config.yml 的 title —— 那里写平台官方名称
+        （GitHub 而不是 github）
+
+    分隔用的圆点由 CSS 生成（见 assets/main.scss 的 .resume-contact），
+    故意不写成 <span>•</span>：打印时社交链接整条 .no-print 隐藏，
+    写死的圆点会孤零零留在纸上，伪元素则跟着宿主一起消失。
+  {%- endcomment -%}
+  <div class="resume-contact">
+    {%- if site.email and site.email != '' -%}
+      <span>
+        <a href="mailto:{{ site.email }}" target="_blank" rel="noopener">{{ site.email | escape }}</a>
+      </span>
+    {%- endif -%}
+    {%- if site.phone and site.phone != '' -%}
+      {%- comment -%} tel: 里不放空格和连字符，号码本身照原样显示 {%- endcomment -%}
+      <span>
+        <a href="tel:{{ site.phone | remove: ' ' | remove: '-' }}" target="_blank" rel="noopener">{{ site.phone | escape }}</a>
+      </span>
+    {%- endif -%}
+    {%- if site.website and site.website != '' -%}
+      <span>
+        <a href="{{ site.website }}" target="_blank" rel="noopener">{{ site.website | remove_first: 'https://' | remove_first: 'http://' | split: '/' | first | escape }}</a>
+      </span>
+    {%- endif -%}
+    {%- if site.github_username -%}
+      <span class="no-print">
+        <a href="https://github.com/{{ site.github_username | cgi_escape | escape }}" target="_blank" rel="noopener">GitHub</a>
+      </span>
+    {%- endif -%}
+    {%- for link in site.additional_links -%}
+      <span class="no-print">
+        <a href="{{ link.url }}" target="_blank" rel="noopener">{{ link.title | escape }}</a>
+      </span>
+    {%- endfor -%}
+
+    {%- comment -%}
+      主题切换也放这一行末尾（认它的人一眼能找到），并且同样是文字 ——
+      原来那个圆形图标按钮是图标行的一员，图标行没了，它单独留着会很突兀。
+
+      用真的 <button> 而不是 <a>：它改变的是页面状态、不是导航，
+      Enter/Space 和 aria-pressed 都靠原生语义。
+
+      「深色 / 浅色」两个标签都渲染，由 CSS 按 body.dark 显示其中一个，
+      JS 只管切 class，不用拼文字（见 assets/js/theme-toggle.js）。
+      这里写的是「点了会切到哪个模式」，不是当前模式。
+
+      不写 title：可见文字已经说清了它会做什么，再挂一个悬停提示只是重复，
+      鼠标划过时还会弹出来挡视线。可访问名由 aria-label 提供。
+    {%- endcomment -%}
+    <button id="theme-toggle" type="button" class="theme-toggle no-print"
+            aria-label="切换深色/浅色主题" aria-pressed="false">
+      <span class="theme-label theme-label--moon">深色</span>
+      <span class="theme-label theme-label--sun">浅色</span>
+    </button>
+  </div>
 </div>

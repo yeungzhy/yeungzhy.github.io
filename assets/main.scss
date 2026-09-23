@@ -3,49 +3,35 @@
 ---
 
 /* ============================================================
-   1. 本地字体：Maple Mono（已放在 assets/fonts/，不经过任何 CDN）
+   1. 本地字体：Maple Mono 可变版（放在 assets/fonts/，不经过任何 CDN）
       font-display: swap = 字体没下载完时先用系统字体顶上，不会白屏
+
+   为什么用可变字体（v7.9 MapleMonoNormal-Variable）而不是原来的 6 个静态字重：
+     ① 体积小：2 个文件共 277KB，比原来 6 个 466KB 少 40%，且加载请求减半；
+     ② 字重全：一个 `font-weight: 100 800` 覆盖 100-800 连续区间，
+        包含 h2/h3/h4 写的 300 —— 原来的静态集只有 400/500/600/700，300 会被
+        浏览器降级到 400 渲染，标题比设计意图粗一档；
+     ③ 已实测字形覆盖与旧字体完全一致（1435/1436 码位，缺失 0）。
+
+   注意源文件是 TTF，这里必须先转成 woff2 再用：
+     源 TTF 共 879KB → 转 woff2 后 277KB（约 3.2 倍压缩）。
+     woff2 只是压缩容器，glyf/gvar 轮廓完全相同，字形无损，
+     可变轴也会完整保留（fvar + gvar 表都在）。
+   重新转换的命令：
+     python -m fontTools.ttLib.woff2 compress -o MapleMono-Variable.woff2 "MapleMonoNormal[wght].ttf"
    ============================================================ */
 
 @font-face {
   font-family: 'Maple Mono';
-  src: url('{{ "/assets/fonts/MapleMono-Regular.woff2" | relative_url }}') format('woff2');
-  font-weight: 400;
+  src: url('{{ "/assets/fonts/MapleMono-Variable.woff2" | relative_url }}') format('woff2');
+  font-weight: 100 800;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Maple Mono';
-  src: url('{{ "/assets/fonts/MapleMono-Italic.woff2" | relative_url }}') format('woff2');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Maple Mono';
-  src: url('{{ "/assets/fonts/MapleMono-Medium.woff2" | relative_url }}') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Maple Mono';
-  src: url('{{ "/assets/fonts/MapleMono-SemiBold.woff2" | relative_url }}') format('woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Maple Mono';
-  src: url('{{ "/assets/fonts/MapleMono-Bold.woff2" | relative_url }}') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Maple Mono';
-  src: url('{{ "/assets/fonts/MapleMono-BoldItalic.woff2" | relative_url }}') format('woff2');
-  font-weight: 700;
+  src: url('{{ "/assets/fonts/MapleMono-VariableItalic.woff2" | relative_url }}') format('woff2');
+  font-weight: 100 800;
   font-style: italic;
   font-display: swap;
 }
@@ -71,54 +57,230 @@ code, pre, kbd, samp {
   font-family: 'Maple Mono', ui-monospace, Menlo, Consolas, monospace;
 }
 
-/* ---- 主题切换按钮 ---- */
-.theme-toggle {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 42px;
-  height: 42px;
-  border: none;
-  border-radius: 50%;
-  background: #f0f0f0;
-  color: #333;
+/* ---- 主题切换按钮 ----
+   它在联系方式行（.resume-contact）的末尾，做成和旁边链接一样的纯文字 ——
+   原来那套圆形图标按钮随图标行一起去掉了（见 _includes/header.html）。
+
+   这里要做两件事：清掉 base.scss 给 <button> 的默认外观（蓝底白字、
+   Helvetica、大 padding），再让它跟旁边的 <a> 长得一模一样。 */
+
+/* 1. 清默认外观。
+     base.scss 的 `button` 规则是 (0,0,1)，这条 (1,0,0) 压得过。
+
+     注意 background 和 color 都要显式重置：
+       - background 不重置 → 蓝底实心方块；
+       - color 不重置 → 白字（点过之后按钮保持 :focus，会一直是白字）。
+     下面 :hover / :focus 也要一起重置，因为 base.scss 有一条
+     `button:hover, button:focus` (0,1,1) 把颜色刷成 #3964a2 白字。 */
+#theme-toggle,
+#theme-toggle:hover,
+#theme-toggle:focus,
+#theme-toggle:active {
+  background: none;
+  color: #477dca;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4rem;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
 
-  &:hover {
-    background: #e0e0e0;
-    transform: scale(1.05);
+#theme-toggle:hover,
+#theme-toggle:focus {
+  color: #355e98;   /* 和 type.scss 的 a:hover 一致 */
+}
+
+/* 2. 键盘聚焦时的可见焦点环（同 .section-toggle 的做法）。
+     鼠标点击不留框：:focus-visible 只在键盘操作时命中。 */
+#theme-toggle:focus-visible {
+  outline: 2px solid #477dca;
+  outline-offset: 2px;
+}
+
+.dark #theme-toggle:focus-visible {
+  outline-color: #6ea8e8;
+}
+
+/* 3. 「深色 / 浅色」两个标签都渲染，靠 CSS 显示其中一个，
+      这样 JS 只切 body.dark，不用拼文案。
+      约定：亮色显示「深色」（点了会变暗），暗色显示「浅色」。 */
+.theme-toggle .theme-label--sun {
+  display: none;
+}
+
+.dark .theme-toggle .theme-label--moon {
+  display: none;
+}
+
+.dark .theme-toggle .theme-label--sun {
+  display: inline;
+}
+
+/* 暗色下保持一致：它和旁边的 <a> 排在同一行，必须是同一个颜色。
+   （_sass/dark.scss 里 .dark a 就是 #477dca，这里跟着它走，
+   不要因为"暗底上想更亮一点"就单独提亮 —— 一行里一个链接颜色不同最扎眼。） */
+.dark #theme-toggle,
+.dark #theme-toggle:hover,
+.dark #theme-toggle:focus,
+.dark #theme-toggle:active {
+  color: #477dca;
+}
+
+/* 4. 明暗切换时的圆形扩散。
+      用 View Transitions API：浏览器给切换前后的页面各拍一张快照，
+      默认是两张交叉淡入淡出。这里把默认动画全关掉、也不做混合，
+      改让「切换后」那张快照从一个圆扩散铺满全屏 —— 视觉上就是明暗
+      从点击处铺开，而不是整页突然变黑或变白。
+      不支持的浏览器会在 JS 里直接切换，这里不需要额外降级样式。 */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* 扩散的节奏：想调手感改这两个值（JS 只负责给原点坐标，不碰动画）。 */
+:root {
+  --theme-reveal-duration: 560ms;
+  --theme-reveal-easing: cubic-bezier(0.5, 0, 0.85, 0.6);
+}
+
+/* 扩散动画**必须用 CSS 定义**，不能用 JS 的 element.animate(..., {pseudoElement})。
+
+   原因：JS 那条路要等 transition.ready 兑现再挂动画，而新版 Chromium 上
+   这个 promise 会被拒绝（InvalidStateError: Transition was aborted /
+   timeout in DOM update），一旦拒绝就整段跳过 —— 页面直接变色、看不到扩散。
+   这正是「旧版 Chrome 有扩散、新版没有」的原因：动画挂在 promise 上，
+   而 promise 的时序是浏览器内部实现，不该被依赖。
+
+   CSS 动画由过渡机制自己启动，不经过任何 promise，各版本一致。 */
+::view-transition-new(root) {
+  animation-name: theme-reveal;
+  animation-duration: var(--theme-reveal-duration);
+  animation-timing-function: var(--theme-reveal-easing);
+  animation-fill-mode: forwards;
+}
+
+/* 圆点坐标由 JS 写在根元素的行内样式上（--theme-reveal-x/y/radius），
+   伪元素从根元素继承这些自定义属性。放在 var() 的兜底值只是保险：
+   真取不到时从视口中心扩散，总比不动强。 */
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0px at var(--theme-reveal-x, 50%) var(--theme-reveal-y, 50%));
   }
-
-  &:focus {
-    outline: 2px solid #477dca;
-    outline-offset: 2px;
+  to {
+    clip-path: circle(var(--theme-reveal-radius, 150vmax) at var(--theme-reveal-x, 50%) var(--theme-reveal-y, 50%));
   }
 }
 
-.dark .theme-toggle {
-  background: #333;
-  color: #e6e6e6;
-
-  &:hover {
-    background: #444;
-  }
+/* 切换过程中临时关掉页面自身的过渡。
+   原因：View Transitions 拍「切换后」快照时，元素自己的 transition 才刚
+   开始，快照里会拍到旧颜色；而扩散的圆心正好落在按钮上，按钮颜色拍错
+   会非常显眼。这里让它直接跳到终值，反正此刻画面由快照接管。
+   这个 class 由 JS 在整个切换期间挂在 <html> 上。 */
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
 }
 
-/* 让 header-container 作为按钮定位参照 */
-.header-container {
-  position: relative;
-}
-
-/* 打印时隐藏切换按钮 */
+/* 打印时隐藏：按钮自带 no-print 已经会隐藏它，这条是冗余保险 */
 @media print {
   .theme-toggle {
     display: none;
   }
+}
+
+/* ---- 可折叠块：点击标题收起 / 展开 ----
+   页面里所有可折叠块的标题都包在 <button class="section-toggle"> 里，
+   点击时 JS（assets/js/section-toggle.js）给 <html> 挂 data-collapsed="key1 key2"，
+   具体藏掉什么由下面按 key 的规则决定。
+   按钮要"看起来就是标题本身"：清掉浏览器给 button 的默认外观，也不做任何
+   悬停 / 激活变色或箭头标记，视觉上与原来的 h3 逐像素一致。 */
+.section-toggle {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  -webkit-appearance: none;
+  appearance: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* 上面的重置是 (0,1,0)，压不过 base.scss 里 `button:hover, button:focus`
+   的 (0,1,1) —— 那条会把按钮刷成 #3964a2 实心蓝。鼠标一悬停 / 键盘聚焦，
+   标题就变成一条蓝带。这里的 (0,2,0) 才能盖住它，background / color 都要
+   显式重置，否则只清背景仍会留下白字。
+   这里**不**再给悬停加任何颜色反馈：标题不该看起来像可点的按钮。 */
+.section-toggle:hover,
+.section-toggle:focus,
+.section-toggle:active {
+  background: none;
+  color: inherit;
+  box-shadow: none;
+}
+
+/* 键盘 Tab 聚焦时才显示焦点环，鼠标点击不留框（同 #theme-toggle） */
+.section-toggle:focus-visible {
+  outline: 2px solid #477dca;
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* 普通 section：收起时整块正文隐藏。选择器由 Liquid 按 _config.yml 的
+   site.content 逐条生成 —— 加新 section 不用手写这条规则。
+   为什么不能只写一条「通用」规则：要匹配的 key 在 <html> 的 data-collapsed 上，
+   而要被隐藏的元素带的是自己的 data-collapse-body，CSS 没有变量能让两者互相对照，
+   只能一个 key 一条。~= 是按空格分词匹配。
+   注意：这里的 for 循环必须与 _layouts/default.html 里生成 key 的写法一致
+   （section.id | default: section.title | slugify），否则两边对不上。 */
+{% for section in site.content %}{%- assign key = section.id | default: section.title | slugify -%}
+html[data-collapsed~="{{ key }}"] [data-collapse-body="{{ key }}"] {
+  display: none;
+}
+{% endfor %}
+
+/* 页头头像的收起 / 展开：点击姓名切换，按钮和上面那些 section 一样由
+   section-toggle.js 接管（点击、记忆、aria 都是同一套）。
+
+   这条得手写 —— 上面的规则是按 site.content 循环生成的，而头像不是简历
+   段落、不在 site.content 里。"avatar" 这个 key 必须与 _includes/header.html
+   里的 data-collapse-key 一致，改名要两边同步。
+
+   没有头像时不渲染按钮（见 header.html），所以不会出现"点了没反应"的控件；
+   也不会与 site.content 里的 key 撞车（那些 key 是 section 标题的 slugify）。 */
+html[data-collapsed~="avatar"] .header-avatar {
+  display: none;
+}
+
+/* 打印时无视折叠状态，永远输出完整简历 —— 用户页面上收起了某节，
+   纸上缺一节几乎必然是无意的。规则写在上面生成的折叠规则之后，
+   同优先级靠顺序覆盖；页面交互不受影响（只在打印介质生效）。 */
+@media print {
+  html[data-collapsed] [data-collapse-body] {
+    display: block;
+  }
+}
+
+/* ---- 页脚 ----
+   页脚只剩一行「Updated 年-月」。正文的 p 是斜体、字号偏大，这里改回正体
+   并收小一档，让这行退到背景里，不抢视线。
+
+   纯文字方案，不配图标：正文用的是 Maple Mono，它不含 emoji 字形，📅 这类
+   图标只能靠系统 emoji 字体 fallback 渲染，彩色图标在深色背景下偏跳，且各
+   平台字形不一致。纯文字零依赖、跨平台一致，也和页面代码风更搭。 */
+.footer-container .footer-updated {
+  margin-top: 4px;
+  font-style: normal;
+  font-size: 1.3rem;
+  color: #999;
 }
 
 /* ---- 下面是可选的微调，取消注释即可生效 ---- */

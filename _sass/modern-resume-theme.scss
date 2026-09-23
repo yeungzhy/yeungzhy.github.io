@@ -1,154 +1,351 @@
 @import "base";
-@import "button";
 @import "type";
 @import "dark";
-@import "icons";
 
-.header-right p {
-  margin-bottom: 3px;
-}
+/* 页头身份块：头像 + 姓名 + 关键词，从左到右一行。
+   头像在左，右侧两行文字（h1 姓名 / h2 关键词）作为一个整体相对头像
+   垂直居中 —— 视觉上两行字的高度与头像平齐，而不是文字缩在头像顶部。
+   字号对比在 _sass/type.scss 的 h1 / h2 里，这里只管排列。 */
+.header-profile {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  /* 页头与页面顶端的距离（原来挂在 .header-left 那一列上，随结构搬过来） */
+  margin-top: 30px;
 
-.header-right a{
-  color:inherit;
-  font-weight:500;
-}
-
-@media screen and (max-width: 767px) {
-  .header-container div{
-    text-align: center;
+  @media screen and (max-width: 767px) {
+    margin-top: 0;
   }
 
-  .header-right p {
-    text-align: center;
-  }
-
-  .header-left {
-    margin-top: 0px;
+  @media print {
+    margin-top: 0;
   }
 }
 
-.profile-img {
-  width: 200px;
-  height: 200px;
-  margin: 0 auto;
-  margin-bottom: 20px;
-  display: block;
-  border-radius: 100px;
+.header-avatar {
+  flex: none;           /* 不参与收缩：姓名再长也保持正圆，不会被压扁 */
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
   background-size: cover;
   background-position: center;
-  background-repeat: repeat, no-repeat;
-  -moz-box-shadow: inset 0 0 20px #636161;
-  -webkit-box-shadow: inset 0 0 20px #636161;
-  box-shadow: inset 0 0 20px #636161;
+  background-repeat: no-repeat;
 }
 
-.list-container {
-  h3 {
-    margin-bottom: 0;
+/* min-width: 0 让长姓名 / 长关键词能换行，
+   否则 flex 子项的默认 min-width: auto 会把头像挤出容器。
+   text-align 显式写 left：文字块宽度由最长的 h2 撑开，一旦被居中，
+   h1（姓名）就会落在盒子中间、离头像老远 —— 小屏尤其明显。 */
+.header-profile-text {
+  min-width: 0;
+  text-align: left;
+}
+
+/* 两行之间的间距：h2 自带的 0.75rem 会把关键词推得太远，破坏
+   「姓名 + 关键词是一个整体」的观感；但也不能贴死 —— 中文的墨迹只占
+   行盒中间一段，行距设 0 时两行会挤在一起。0.4rem 是实测接近参考稿
+   那个呼吸感的取值（见 _sass/type.scss 的 h1/h2 行高）。 */
+.header-profile-text h2 {
+  margin-bottom: 0;
+}
+
+.header-profile-text h1 {
+  margin-bottom: 0.4rem;
+}
+
+/* 联系方式 / 社交地址：一行纯文本链接，彼此用一个圆点隔开。
+   链接文字、顺序都由 _includes/header.html 决定，这里只管排布。
+
+   排布完全交给 flex 换行：够宽就是一行，不够就自然折成两三行 ——
+   决定在哪里断行的是"这行还放不放得下"，而不是屏幕宽度，
+   所以这里没有任何断点。（曾经按 992px 一刀切成竖排 —— 手机上是七行，
+   又长又难扫，纯属偷懒。） */
+.resume-contact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  /* column-gap 只在"同一行的相邻两项"之间生效，行首那项不会被缩进 */
+  column-gap: 2.3rem;
+  margin-top: 18px;
+  font-size: 1.4rem;
+  line-height: 1.8;
+}
+
+.resume-contact > * {
+  position: relative;   /* 给下面那颗绝对定位的圆点当参照 */
+}
+
+/* 圆点：由 JS 判定后才挂上 .has-dot（见 assets/js/contact-dots.js）。
+   纯 CSS 判断不了"这一项是不是被挤到了行首"，而圆点落在行首会读成列表符号。
+   圆点用绝对定位画在 column-gap 让出的空隙里，不占布局 ——
+   JS 开关它不会引起任何文字位移。
+
+   用伪元素而不是写死的 <span>•</span>：打印时社交链接整条 .no-print 隐藏，
+   写死的圆点会孤零零剩在纸上，伪元素跟着宿主一起消失。 */
+.resume-contact > .has-dot::before {
+  content: "•";
+  position: absolute;
+  left: -2.3rem;        /* 正好落在与上一项之间的空隙里 */
+  width: 2.3rem;
+  text-align: center;
+  color: #bbb;
+}
+
+/* 小屏（手机）：头像和字号收一档。
+   实测（375px 视口）：横向可用 = 容器 330px − 头像 − 间距。100px 头像 +
+   16px 关键词时只剩 ~224px，而「Java 后端工程师 · 6 年经验」要 ~224px，
+   最后一个字会被挤到第二行，两行文字反而比头像高。收到 64px 头像 +
+   14px 关键词（需 ~196px）后余量充足，两行仍与头像基本平齐。
+   这段必须写在上面基础规则的**后面** —— 媒体查询不改变优先级，
+   同为 (0,1,0) 时靠源码顺序决定谁生效。 */
+@media screen and (max-width: 767px) {
+  .header-profile {
+    gap: 14px;
+  }
+
+  .header-avatar {
+    width: 64px;
+    height: 64px;
+  }
+
+  .header-profile-text h1 {
+    font-size: 3.2rem;
+  }
+
+  .header-profile-text h2 {
+    font-size: 1.4rem;
   }
 }
 
-.border-weak  {
+/* 条目之间的虚线分隔（section-list.html 默认给每条挂 border-weak）。
+   最后一条不画线，否则会顶着下一个 section 的标题留一条拖尾。 */
+/* 文档列宽 —— 只在这里定义一次，下面的正文容器和"纸张"灰底都用它。
+   页头 / 关于 / 各 section / 页脚共用 Bootstrap 的 .container，默认最宽
+   1170px，铺满屏幕是"网页"不是"文档"。收进 860px：A4 比例的舒适阅读宽度，
+   也是博客 / 论坛常见的正文宽度（改这里，灰底会跟着一起变）。
+   本文件在 Bootstrap CDN 之后编译，同优先级靠顺序覆盖它的响应式宽度。 */
+:root {
+  --doc-column-width: 860px;
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: var(--doc-column-width);
+  }
+}
+
+/* 正文列的内边距：让文字不要贴着白底列的边缘。
+   参考稿（jsonresume 主题）里白底列 528px、文字两侧各留 27px（约列宽的 5%），
+   这里按同一比例放大到 860 的列 → 44px。窄屏按档递减，手机上保留一点呼吸感
+   即可，不必等比例 —— 小屏的宽度本来就要全部用来放字。
+
+   注意 Bootstrap 给 .container 的就是 15px 左右内边距，这里覆盖它
+   （本文件在 Bootstrap 之后编译，同优先级靠顺序生效）。 */
+.container {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    padding-left: 44px;
+    padding-right: 44px;
+  }
+}
+
+/* 桌面端的"纸张"效果：中间一条白底正文列，左右露灰底。
+   为什么需要：全部折叠后页面比屏幕短、整页又都是纯白，看不出正文的
+   左右边界在哪，版面像浮在半空。
+
+   做法是在 body 上铺一条居中的白色竖条（纯白渐变只铺满正文列宽），
+   body 自身的底色就从两侧露出来当灰边。
+
+   为什么画在 body 上、而不是给每个 .container 加白底：页头 / 各 section /
+   页脚是**各自独立的容器**，彼此之间有空隙；逐个加白底的话，容器之间的
+   缝隙会横向露出灰色，把一整条竖条切成一段一段。画在 body 上才是连续一张纸。
+
+   只在 >=992px 生效：那时左右才有富余空间（860 的列两侧各留 66px 起）。
+   平板 / 手机列宽本就贴边，灰色只会剩下几像素的杂边，不如不要 ——
+   这就是"移动端只能中间白底"。打印同理，见下面的 print 块。 */
+@media (min-width: 992px) {
+  body {
+    background-color: #f1f1f1;
+    background-image: linear-gradient(#fff, #fff);
+    background-repeat: no-repeat;
+    background-size: var(--doc-column-width) 100%;
+    background-position: top center;
+  }
+
+  /* 暗色下反过来：底更暗、正文列仍是原来的 #222，明暗关系与亮色一致 */
+  .dark {
+    background-color: #181818;
+    background-image: linear-gradient(#222, #222);
+  }
+}
+
+/* ---- 页脚贴底（sticky footer）----
+   body 撑满一屏并变成纵向 flex，让 main 吃掉剩余高度，页脚就被顶到底部。
+
+   为什么需要：所有 section 都折叠后内容比屏幕短，页脚会跟着内容上浮到
+   半空中，下面留一大片空白 —— 看起来像没渲染完，而不是"内容到此结束"。
+   内容本来就比屏幕长时这条不产生影响，页脚仍在文档末尾。
+
+   flex-shrink: 0 是防止内容变长时页脚被压扁。 */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main.page-content {
+  flex: 1 0 auto;
+}
+
+.footer-container {
+  flex-shrink: 0;
+}
+
+/* 上面把 body 变成 flex 容器后，body 的直接子元素（页头 / 页脚两个
+   .container）会成为 flex item。Bootstrap 在 <768px 不给 .container 定宽
+   （width: auto），而没有定宽的 flex item 会被内容宽度决定大小、再被
+   margin: auto 居中 —— 实测 375px 下页脚被压成 131px 宽并居中。
+   这里补一个满宽，恢复它原来在普通文档流里的表现。
+   768px 以上 Bootstrap 给了 750/970/1170 的定宽，不会有这个问题。 */
+@media (max-width: 767.98px) {
+  body > .container {
+    width: 100%;
+  }
+}
+
+/* 打印时回到整张白纸：纸上不该出现灰边，也不该把"屏幕上的纸"印出来。 */
+@media print {
+  body {
+    background: #fff;
+    background-image: none;
+  }
+}
+
+.border-weak {
   padding-bottom: 8px;
   border-bottom: dashed 1px #CCCCCC;
 }
 
-.layout {
-  margin-top: 3rem;
-  display: flex;
-  flex-direction: row;
+.border-weak:last-child {
+  border-bottom: none;
+}
 
-  .details {
+/* ---- 简历条目：单栏叙事 ----
+   原来是「左栏标题 / 右栏内容」的两栏布局，左栏只有 25% 宽，长公司名换行破碎，
+   正文被挤在右边读起来像表格。改成单栏：标题与时间同行（两端对齐），
+   下面是副标题、简介、正文，一条经历自上而下读完。
+
+   数据字段的用法（见 _config.yml 各条目的键）：
+     title      条目标题（加粗，整条的主锚点）
+     caption    右上角的时间，如 2026.01 - 2026.08
+     sub_title  标题下的副标题（如职位名），用主题色，比标题弱一档
+     quote      简介段（灰色斜体）
+     description  正文，Markdown */
+.resume-item {
+  margin-top: 2.6rem;
+
+  /* 标题行：标题在左、时间在右，两端对齐。
+     baseline 对齐让两段不同字号的文字坐在同一条基线上，比 center 自然。 */
+  .item-head {
     display: flex;
-    flex-direction: column;
-    text-align: left;
-    justify-content: center;
-    vertical-align: middle;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+  }
 
-    p {
-      margin-bottom: 3px;
-      font-size: 1.6rem;
-      text-align: inherit;
-      font-weight: 300;
+  h4 {
+    margin-bottom: 0;
+    font-weight: 500;
+    font-size: 2rem;
+    /* 标题长到换行时也不被压扁，把空间让给时间 */
+    min-width: 0;
 
-      b {
-        font-weight: 500;
+    a {
+      font-weight: 500;
+      color: inherit;
+    }
+  }
+
+  /* 时间：不参与收缩、不换行 —— 它是这条经历的定位信息，挤成两行会很难扫 */
+  .item-caption {
+    flex: none;
+    white-space: nowrap;
+    color: #999;
+    font-size: 1.4rem;
+
+    @media print {
+      color: #555; /* 灰字打印出来太淡，纸上加深 */
+    }
+  }
+
+  /* 副标题（职位名 / 专业）：主题色。它和旁边的链接同色是刻意的 ——
+     参考稿里这一行就是蓝色，作为每条经历的第二视觉锚点。 */
+  .item-subtitle {
+    margin-bottom: 0.8rem;
+    color: #477dca;
+    font-size: 1.6rem;
+    font-weight: 400;
+  }
+
+  /* 正文列宽不设限：整条就是正文，跟页头 / 个人总结同一条左边界 */
+  .item-body {
+    > p {
+      text-align: left;
+    }
+
+    /* 技术栈行：正文第一段（通常是「技术栈：xxx」）用灰色小字，
+       和下面的 bullet 成果列表区分开 */
+    > p:first-child {
+      font-size: 1.5rem;
+      color: #777;
+
+      @media print {
+        color: #555;
       }
     }
 
-    @media screen and (max-width: 767px) {
-      text-align: center!important;
+    /* 成果列表：参考稿的 bullet 间距明显比正文松，一条条读下来不费劲 */
+    > ul {
+      margin-top: 0.6rem;
 
-      p {
-        text-align: center!important;
+      li {
+        text-align: left;
+
+        & + li {
+          margin-top: 0.4rem;
+        }
       }
     }
+  }
+
+  .item-link {
+    margin-top: 0.6rem;
+    font-size: 1.5rem;
 
     a {
       color: inherit;
       font-style: italic;
       font-weight: 300;
     }
-
-    .fa {
-      font-size: 2rem;
-    }
-
-    .link {
-      font-size: 1.5rem;
-    }
-
-    h4 {
-      margin-bottom: 0.1rem;
-      font-weight: 500;
-
-      @media print {
-        margin-bottom: 0.2rem;
-      }
-
-      a {
-        font-weight: 500;
-      }
-    }
   }
 }
 
-.layout-right {
-  flex-direction: row-reverse;
-}
-
-.layout-right, .layout-top-right {
-  .details {
-    text-align: right;
-  }
-}
-
-.layout-left, .layout-right {
-  @media screen and (max-width: 767px) {
-    flex-direction: column;
-  }
-
-  .details {
-    margin-bottom: 2rem;
-  }
-}
-
-.layout-top-middle, .layout-top, .layout-top-right {
-  flex-direction: column;
-
-  .details, .content {
-    width: 100%;
-  }
-}
-
-.layout-top-middle {
-  .details {
-    text-align: center;
-  }
-}
-
+/* 原 100px：那是内容没撑满时"把页脚往下推远一点"的补偿。现在页脚改贴底
+   （见上面的 sticky footer），这 100px 只会在页脚上方留一段空白、把它顶得
+   离正文更远，收敛到 40px。 */
 .footer-container {
-  margin-top:100px;
+  margin-top: 40px;
 }
 
 .footer-container p {
@@ -180,15 +377,24 @@
   color: #4C4C4C;
 }
 
+/* 条目开头那句斜体简介：灰色小字、与正文左对齐，视觉上挂在条目正文开头。
+   原来屏幕上居中 + 大 padding，夹在左栏标题和 bullet 之间显得四处飘。 */
 p.quote {
   font-size: 1.4rem;
   font-style: italic;
-  padding: 1rem 2.5rem;
-  text-align: center;
+  color: #999;
+  padding: 0 0 0.4rem;
+  text-align: left;
 
   @media print {
-    text-align: left;
-    padding: 0rem 1rem;
     margin-top: 1rem;
+    color: #555;
+  }
+}
+
+/* 技术栈行的常规配色在上面 .resume-item .item-body 里；暗底上要提亮一档 */
+.dark {
+  .resume-item .item-body > p:first-child {
+    color: #a0a0a0;
   }
 }

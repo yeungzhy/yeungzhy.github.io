@@ -28,21 +28,81 @@
     })();
   </script>
 
+  {%- comment -%}
+    哪些块「默认收起」（除了配置，下面那段内联脚本也要用）。
+
+    每个 section：各自 _config.yml 条目里的 collapsed，默认 false（展开）。
+    用户点过之后以用户的选择为准，见下面的合并逻辑。
+  {%- endcomment -%}
+  <script>
+    // 恢复所有「可折叠块」的收起状态。
+    //
+    // 必须放在 body 顶部、正文之前：如果等 DOMContentLoaded 或脚本末尾再执行，
+    // 被收起的块会先画出来再被隐藏，闪一下。这里把要收起的 key 拼成
+    // <html data-collapsed="about 教育背景">，CSS 用 [data-collapsed~="key"] 匹配
+    // （见 assets/main.scss）。key 里不会出现空格 —— 模板对标题做了 slugify，
+    // 空格会被转成连字符，所以空格分隔是安全的。
+    //
+    // 优先级：用户的选择 > _config.yml 的默认值 > 展开。
+    // 用一个数组字面量而不是字符串拼接来传默认值，省掉分隔符和转义问题。
+    // 末尾的逗号是合法的 JS（数组尾部空元素会被忽略），所以每个块都能无脑
+    // 追加，不用判断"是不是第一个"。
+    (function () {
+      var defaultCollapsed = [
+        {%- for section in site.content -%}
+          {%- if section.collapsed -%} "{{ section.id | default: section.title | slugify }}",{%- endif -%}
+        {%- endfor -%}
+      ];
+
+      var saved;
+      try {
+        saved = JSON.parse(localStorage.getItem('resume-collapsed') || '{}');
+        if (typeof saved !== 'object' || saved === null || Array.isArray(saved)) saved = {};
+      } catch (e) {
+        saved = {}; // 存储损坏就退回默认值，不能因此阻断页面
+      }
+
+      // 先铺默认值，再让用户的选择覆盖上去 —— 用户把「默认收起」的块点开过，
+      // 存的就是 0，这里会正确地保持展开。
+      var merged = Object.assign({}, saved);
+      defaultCollapsed.forEach(function (key) {
+        if (!(key in merged)) merged[key] = 1;
+      });
+
+      var keys = Object.keys(merged).filter(function (k) { return merged[k]; });
+      if (keys.length) {
+        document.documentElement.dataset.collapsed = keys.join(' ');
+      }
+    })();
+  </script>
+
   {%- include header.html -%}
 
   <main class="page-content" aria-label="Content">
     <div class="wrapper">
 
-      {%- if jekyll.environment == 'production' and site.gtm -%}
-        {%- include gtm_body.html -%}
-      {%- endif -%}
-
       {%- include about.html -%}
 
       {% for section in site.content %}
+        {%- comment -%}
+          key 决定「折叠状态存在哪个键下」，也是 h3 的锚点 id。
+          默认取标题的 slugify（中文会被保留，如「教育背景」）。想用干净的
+          ASCII 键、或想改标题又不丢用户的选择，就在 _config.yml 里给这个
+          section 加一行 `id: education`。
+          标题包按钮、正文包一层 [data-collapse-body]，都由 section-toggle.js
+          统一接管；「收起」具体藏什么由 CSS 按 key 决定（见 assets/main.scss）。
+        {%- endcomment -%}
+        {%- assign key = section.id | default: section.title | slugify -%}
         <div class="container {{ section.layout }}-container">
-          <h3 id="{{ section.title | slugify }}">{{ section.title }}</h3>
-          {% include {{ section.layout | prepend: "section-" | append: ".html" }} content=section.content %}
+          <h3 id="{{ key }}">
+            <button type="button" class="section-toggle"
+                    data-collapse-key="{{ key }}"
+                    aria-expanded="true"
+                    aria-controls="{{ key }}-body">{{ section.title }}</button>
+          </h3>
+          <div id="{{ key }}-body" data-collapse-body="{{ key }}">
+            {% include {{ section.layout | prepend: "section-" | append: ".html" }} content=section.content %}
+          </div>
         </div>
       {% endfor %}
     </div>
@@ -50,6 +110,8 @@
 
   {%- include footer.html -%}
   <script src="{{ '/assets/js/theme-toggle.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/section-toggle.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/contact-dots.js' | relative_url }}"></script>
 </body>
 
 </html>

@@ -1,8 +1,9 @@
 /* 原主题第 1 行是 Google Fonts（Roboto），国内加载慢/超时，已删除。
-   字体改用本地 Maple Mono，见 assets/main.scss 的 @font-face。 */
+   字体改用本地 Maple Mono，见 assets/main.scss 的 @font-face。
+   图标原来走 FontAwesome 的 CDN 字体，后来换过一轮内联 SVG，
+   现在页面已不含任何图标（页头和项目条目都是纯文字），所以也就
+   不再引入 FontAwesome。 */
 @import url(https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css);
-@import url(https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css);
-@import url(https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/v4-shims.min.css);
 
 button, input[type="button"], input[type="reset"], input[type="submit"] {
   appearance: none;
@@ -72,7 +73,6 @@ dl {
 
 table {
   border-collapse: collapse;
-  font-feature-settings: "kern", "liga", "tnum";
   margin: 0.75rem 0;
   table-layout: fixed;
   width: 100%; }
@@ -167,24 +167,19 @@ body {
   margin-top:50px;
 }
 
-.header-right {
-  text-align: right;
-}
-
-.header-left {
-  margin-top: 30px;
-
-  @media print {
-    margin-top: 0px;
-  }
-}
-
-.header-right p {
-  font-size: 1.6rem;
-  text-align: right;
+/* 打印纸面：A4 + 固定页边距（@page 是顶层规则，天然只作用于打印介质）。
+   没有它浏览器用默认页边距，导出 PDF 时留白不可控。 */
+@page {
+  size: A4;
+  margin: 14mm 12mm;
 }
 
 @media print {
+  /* 一条经历不跨页截断；比一页还长的条目浏览器会自动忽略这条 */
+  .resume-item {
+    break-inside: avoid;
+  }
+
   a[href]:after {
     content: none !important;
   }

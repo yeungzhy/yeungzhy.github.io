@@ -1,9 +1,26 @@
-<div class="container footer-container">
-  <p>
-    {{ site.name | escape }} -
-    <a href="mailto:{{ site.email }}" target="_blank">{{ site.email | escape }}</a>
-    {%- if site.footer_show_references -%}
-      &nbsp;- {{ site.references_title | default: "References on request" }}
-    {%- endif -%}
-  </p>
+<div class="container footer-container no-print">
+  {%- comment -%}
+    页脚只留一行：Updated + 年月（YYYY-MM，如 2026-09）。
+    日期取构建时间 site.time，每次部署自动更新，不用手改。
+
+    为什么不用 ©：版权声明是公司站/产品页的样板，个人单页简历挂上去没什么
+    实际主张意义，反而像抄来的。对看简历的人真正有用的是"这份简历多久没更新"。
+
+    为什么用纯文字而不是图标：正文用的是 Maple Mono，它不含 emoji 字形，📅
+    这类图标只能靠系统 emoji 字体 fallback 渲染 —— 彩色图标在深色背景下偏跳，
+    且各平台字形不一致。纯文字方案零依赖、跨平台一致，也和页面代码风更搭。
+
+    为什么标签后跟 &nbsp;：Liquid 的连字符空白控制标记（花括号内侧加 -）会吃掉
+    两端换行缩进，靠模板里的普通空格不可靠；&nbsp; 是实体，不受影响。
+    注意：注释里不要出现花括号加百分号这种定界符 —— Liquid 的 comment 标签仍会
+    对其做词法扫描，写得不完整会直接让整个构建报 tag 未正确闭合。
+  {%- endcomment -%}
+  {%- if site.footer_show_updated -%}
+    <p class="footer-updated">
+      {%- if site.footer_updated_label and site.footer_updated_label != '' -%}
+        {{ site.footer_updated_label }}&nbsp;
+      {%- endif -%}
+      {{ site.time | date: '%Y-%m' }}
+    </p>
+  {%- endif -%}
 </div>

@@ -1,2 +1,7 @@
-{% assign protocol = include.href | strip | slice: 0, 4 %}
-<a href="{% if protocol != 'http' %}//{% endif %}{{ include.href }}" target="_blank" class="{{ include.class }}">
+{%- comment -%}
+  只输出 <a> 的开始标签，闭合的 </a> 由调用方写（历史遗留写法，别改）。
+  传 label 时会把标题同时给 title 和 aria-label；图标链接靠它才有可访问名
+  （图形本身带 aria-hidden，屏幕阅读器读不到 SVG 的内容）。
+{%- endcomment -%}
+{%- assign protocol = include.href | strip | slice: 0, 4 -%}
+<a href="{% if protocol != 'http' %}//{% endif %}{{ include.href }}" target="_blank" rel="noopener" class="{{ include.class }}"{% if include.label %} title="{{ include.label | escape }}" aria-label="{{ include.label | escape }}"{% endif %}>

@@ -2,219 +2,239 @@
 # 站点信息
 # ============================================================
 
-# 这个值只用于页面右上角显示 "View on GitHub"，填错不影响页面渲染
 repository: yeungzhy/yeungzhy.github.io
-
-# 仓库名是 yeungzhy.github.io，站点在根域名 https://yeungzhy.github.io/
-# 所以 baseurl 保持空。若将来把站点挪到子路径下，才需要取消注释并填写
-# baseurl: "/子路径"
-
-# favicon（已换成你提供的那套，文件在 images/favicon/ 下，一般不用再改）
 favicon: images/favicon/favicon.ico
 
-# 原主题用 version 区分新旧两套内容写法（v1/v2），
-# 二开已移除 v1 模板与分支判断，只保留 v2 写法，此配置项不再需要
-# version: 2
+# 页面语言（<html lang> 属性）。中文页写 zh —— 默认值是 en，
+# 读屏软件会按英文发音规则读中文，浏览器也可能弹翻译提示
+lang: zh
+
 
 # ============================================================
-# 个人信息
+# 个人信息（注释掉或留空 "" 都不显示）
 # ============================================================
-
-# TODO: 基本必填
 name: 张三
-title: 高级 Java 后端工程师 · 6 年经验
-email: zhangsan@example.com
 
-# 网站/博客（可选，留着注释就不显示）
-website: https://yeungzhy.github.io
+# 页头姓名下面那行关键词（职位 / 一句话标签），字号比姓名小一档。
+# 不想要这一行就留空 ""，或整行注释掉
+title: Java 后端工程师 & 乐于助人
 
-# 手机号：公开页面上不建议暴露，默认注释掉
-# 如果确实要放，取消下面这行注释并改成你的号码
-# phone: 138-0000-0000
+# 页头姓名左侧的圆形头像。整行注释掉就不显示头像，姓名照常左对齐，
+# 点姓名可以收起 / 展开它（和其它 section 一样会记住选择）。
+# 头像不上纸 —— 打印时始终隐藏。
+profile_image: images/profile.png
+
+# 邮箱 / 电话 / 个人网站，填了就直接显示在页头的联系方式行里
+# （不用写前缀文字标注类型 —— 邮箱和网址一眼能认出来）
+# 网址只显示域名（去掉 https://），href 里仍指向完整地址
+email: idxx@163.com
+phone: 166-7777-8888
+# website: https://yeungzhy.github.io
+
 
 # 暗色模式：true=强制暗色 / false=跟随系统 / never=永远不用暗色
-darkmode: false
+darkmode: never
 
 # ============================================================
 # 社交账号（只填用户名，不要填完整 URL；留着注释就不显示该图标）
 # ============================================================
 
 github_username: yeungzhy
-linkedin_username: yeungzhy
-# stackoverflow_username: "00000001"
-# twitter_username: your-twitter-name
-# instagram_username: your-instagram-name
-# youtube_username: your-youtube-name
-# zhihu / 掘金 / 公众号等没有内置图标，用下面的 additional_links 加
 
-# 自定义图标链接（博客、掘金、Gitee 等）
-# icon 名称从 https://fontawesome.com/search?m=free 搜，用 fas fa-xxx 或 fab fa-xxx
-# TODO: 按需增删
+# 自定义链接（飞书、bilibili、博客、Gitee 等）
+# 这些只出现在页头联系方式那一行里，写成标题 + 网址即可。
+#
+# title 就是链接的可见文字，写成什么样就直接显示在页面上。
 additional_links:
-- title: 技术博客
-  icon: fas fa-blog
-  url: https://your-blog.com
-- title: 掘金
-  icon: fas fa-feather
-  url: https://juejin.cn/user/xxxx
-# - title: Gitee
-#   icon: fab fa-git-alt
-#   url: https://gitee.com/your-name
+  - title: 飞书
+    url: https://my.feishu.cn/wiki/HU7Cw4GWYi4D5WkKUamc2ceGn5e
+  - title: Gitee
+    url: https://gitee.com/your-name
 
 # ============================================================
 # 关于我（顶部简介）
 # ============================================================
 
-# TODO: 换成你自己的照片，文件名保持 images/profile.jpg 即可
-about_profile_image: images/profile.png
+about_title: 个人总结
 
-# TODO: 改这段。<mark>xxx</mark> 会显示成高亮标签，用来突出关键词
+# <mark>xxx</mark> 会显示成高亮标签，用来突出关键词
 about_content: | # 这个竖线表示保留换行，可以写多段，支持 Markdown
-  6 年 Java 后端开发经验，专注高并发系统设计与微服务架构落地。主导过多个从 0 到 1 的项目，也扛过日均千万级请求的线上系统重构。
-
-  最擅长的技术方向： <mark>Java / Spring Cloud</mark> 、 <mark>高并发与性能优化</mark> 、 <mark>分布式与中间件</mark>
+  6 年 Java 后端开发，主导航司问卷投放平台重构，日投放量从 2 万+ → 6 万+
+  
+  擅长把重复劳动沉淀为<mark>通用组件</mark>，习惯从数据合规、容灾降级等场景出发思考设计
+  
+  期望在高并发与工程效能方向继续深入，把项目中验证过的通用能力沉淀为团队级方案
 
 # ============================================================
-# 简历正文
-# 每一段以 "- title:" 开头，layout 有两类：
-#   list = 条目式（适合工作经历 / 项目 / 教育）
+# 简历正文，content节点下，
+#
+# 每段以 "- title:" 开头，layout 有两类：
+#   list = 条目式（适合工作经历 / 项目经验 / 教育）
 #   text = 纯文本（适合技能清单 / 自我评价）
-# 条目内 layout 可选：left（左对齐）/ right / top-middle（居中）/ top-right
+#
+# list 条目支持的键（title 必填，其余可选）：
+# 条目是单栏叙事排版：标题与时间同行，下面依次是副标题 / 简介 / 正文
+#   title        条目标题（如公司名、项目名），必填
+#   caption      右上角的时间，如 2026.01 - 2026.08
+#   sub_title    标题下方的副标题（如职位名 / 专业），用主题色
+#   quote        简介段（灰色斜体）
+#   description  正文，Markdown；第一段纯文本会渲染成"技术栈"样式
+#                （灰色小字，区别于 bullet 列表）
+#   border       条目间虚线分隔：不写 = 有分隔线（weak）；写 no = 这条不要线
+#   link / link_text        条目末尾的单个链接（后者是显示文字，不写显示 URL）
+#
+# 每段都可以点击标题折叠。两个可选字段：
+#   collapsed: true   是否折叠，true = 收起，false = 展开，不写默认
+#
+#   id: education     折叠状态用哪个键记、锚点用哪个 id。
+#                     不写则用标题（中文标题也能直接用）。改标题又想保住
+#                     老访客的折叠选择时，写上它。
+#
+# 用户点过之后以用户的选择为准，配置里的默认值只在没点过时生效。
 # ============================================================
 
 content:
 
   # ---------------------------------------------------------
-  # 1. 工作经历（倒序：最近的写最前面）
-  # ---------------------------------------------------------
-  - title: 工作经历
-    layout: list
-    content:
-      - layout: left
-        title: TODO 公司名 A
-        sub_title: 高级 Java 后端工程师
-        caption: 2022.03 - 至今
-        link: https://company-a.com
-        # link_text: 公司官网（不填则直接显示网址）
-        quote: >
-          一句话说明这家公司是做什么的、你在其中的定位。
-        description: | # 用 | 保留换行，可以写多个 bullet
-          - 负责 XXX 核心系统的设计与开发，支撑日均 XX 万订单 / XX 万 QPS
-          - 主导 XX 系统重构，接口 P99 从 XXXms 降到 XXms，机器成本下降 XX%
-          - 搭建 XX 中间件 / 平台，被 N 个业务线复用，接入方超过 X 个
-          - 带 X 人小组，负责需求拆分、Code Review 与线上稳定性保障
-
-      - layout: left
-        title: TODO 公司名 B
-        sub_title: Java 后端工程师
-        caption: 2019.07 - 2022.02
-        quote: >
-          一句话介绍公司 / 业务。
-        description: |
-          - 参与 XX 平台后端开发，独立完成 XX 模块从设计到上线
-          - 优化 XX 慢查询，将 XX 接口响应时间从 XX 降至 XX
-          - 引入 XX 组件（如 MQ / Redis / ES）解决 XX 问题
-
-  # ---------------------------------------------------------
-  # 2. 项目经验（挑 2~3 个最能打的，写清楚"你做了什么 + 结果如何"）
-  # ---------------------------------------------------------
-  - title: 项目经验
-    layout: list
-    content:
-      - layout: left
-        title: TODO 项目名 A
-        sub_title: 后端负责人
-        caption: 2023.05 - 2023.12
-        additional_links:
-          - title:  GitHub 开源地址
-            icon: fab fa-github
-            url: https://github.com/your-github-name/project-a
-        quote: >
-          一句话说清这个项目解决什么问题。
-        description: |
-          技术栈：Spring Boot / MySQL / Redis / RocketMQ / XX
-
-          - 设计 XX 方案，解决 XX 问题
-          - 通过 XX 手段将 XX 指标提升 XX%
-          - 踩坑与解法：（可选，写 1 条能体现深度的）
-
-      - layout: left
-        title: TODO 项目名 B
-        sub_title: 核心开发
-        caption: 2021.03 - 2021.09
-        quote: >
-          一句话说清这个项目解决什么问题。
-        description: |
-          技术栈：XX
-
-          - 负责 XX 模块
-          - 实现 XX 能力
-
-  # ---------------------------------------------------------
-  # 3. 专业技能（text 布局，直接用 Markdown 写）
+  # 专业技能（text 布局，直接用 Markdown 写）
   # ---------------------------------------------------------
   - title: 专业技能
     layout: text
     content: | # 这里整体是 Markdown，随便排版
-      **Java / JVM**：熟悉并发编程、JVM 调优、GC 原理与常见排障手段
+      - JDK 21 虚拟线程与 CompletableFuture 异步编排，有 3 倍吞吐提升的线上实践
+      - Spring Cloud Gateway / Nacos / OpenFeign / Sa-Token，落地网关统一动态鉴权
+      - MySQL 索引设计与执行计划分析、深分页优化，封装统一分页，杜绝 ORDER BY 注入
+      - 注解式 MyBatis 字段加解密、HMAC-SHA256 盲索引，出库解密 / 出参脱敏 / 日志脱敏三层分离
+      - Redis + Caffeine 多级缓存，Pub / Sub 广播失效 + fail-closed 容灾设计
+      - 主导设计异步导出框架（启动期全覆盖校验）、零侵入审计组件，均已在组内复用
+      - 基于 RocketMQ 的异步解耦与最终一致，幂等消费保障跨系统数据一致性
+      - 策略 / 模板方法 / 责任链 / 状态机、函数式接口、充血模型，在导出框架与规则引擎中落地
+      - Docker 部署 Ollama 跑 Embedding 模型、翻译模型，供大模型 Function Calling 调用
+      - Spring AI 本地实践带 RAG 的对话应用，实现工具调用、SSE 流式输出与上下文记忆压缩
 
-      **框架**：Spring Boot / Spring Cloud / MyBatis / Dubbo，读过部分核心源码
 
-      **中间件**：MySQL（索引、事务、慢查询优化）、Redis（缓存设计、分布式锁）、RocketMQ / Kafka
 
-      **分布式**：熟悉分布式事务、限流降级、链路追踪、分库分表方案
-
-      **工程能力**：Docker / Kubernetes 基础、CI/CD、Linux 常用命令与线上排查
-
-      **其他**：Python / Shell（日常脚本）、前端基础（HTML / CSS / JS，可独立完成简单页面）
-
-  # ---------------------------------------------------------
-  # 4. 教育背景
-  # ---------------------------------------------------------
-  - title: 教育背景
+  - title: 项目经验
     layout: list
     content:
       - layout: left
-        title: TODO 学校名
-        sub_title: 计算机科学与技术 · 本科
-        caption: 2015 - 2019
-        # quote: >
-        #   一句话补充（奖学金、竞赛等）
-        # description: |
-        #   在校期间的补充经历，如 ACM 竞赛、实验室项目等
+        title: 航司问卷投放平台
+        sub_title: 核心开发
+        quote: >
+          为出行乘客精准筛选目标人群并推送满意度问卷，解决旧系统漏抓航班、日投放仅 2 万+ 的问题。
+        description: |
+          技术栈：Spring Boot 3.5 / Spring Cloud / OceanBase / MyBatis-Plus / Redis / Nacos / RocketMQ
 
-  # ---------------------------------------------------------
-  # 5. 其他（兴趣爱好 / 证书 / 开源贡献，不想要就整段删掉）
-  # ---------------------------------------------------------
-  - title: 关于我的更多
-    layout: text
-    content: |
-      - 坚持写技术博客 X 年，累计 XX 篇，XX 万阅读
-      - GitHub 有 XX 个开源项目，累计 XX star
-      - 证书：XXX（如 AWS 解决方案架构师、阿里云 ACE 等）
-      - 爱好：XX / XX / XX
+          - 将耦合大任务拆为 ready / filter / send 状态机流水线，经 RocketMQ 投递解耦、幂等回写，各阶段可独立调度
+          - 重构后彻底解决漏抓航班，日投放 2 万+ → 6 万+，单节点余量可支撑业务增长至 8~10 万
+          - 设计注解式 MyBatis 字段加解密拦截器，落库自动加密、出库自动解密，业务代码零侵入
+          - 基于 HMAC-SHA256 设计盲索引，密文列支持明文等值查询；空值不生成索引，规避空串哈希碰撞
+          - 出库解密 / 出参脱敏 / 日志脱敏三层分离，确保敏感数据不漏入日志
+          - 动态规则配置表 + 优先级匹配器链实现多条件短路，业务零代码上线新规则，节省上线周期 ≥1 个月
+          - 规则 ID + 名称写入 MDC，贯穿筛选流程，支持按规则维度排障与条件命中分布统计
+          - 虚拟线程 + CompletableFuture 并发编排，筛选吞吐提升约 3 倍
+          - 函数式接口辅助实现 15 个二级维度的统计，导出报表后对接 AI 自动生成分析结论
+
+      - layout: left
+        title: 航司问卷调研平台
+        sub_title: 核心开发
+        quote: >
+          面向乘客投放调研问卷的运营平台，覆盖问卷配置到统计分析全链路，重点保障鉴权高可用与数据合规。
+        description: |
+          技术栈：Spring Boot 3.5 / Spring Cloud / Sa-Token / Redis / OceanBase / MyBatis-Plus / RocketMQ
+
+          - 菜单权限码与"路径 → 权限"映射收敛到网关统一判定，鉴权热路径零数据库查询
+          - 权限缓存 Redis + Caffeine 多级结构，Pub / Sub 广播刷新各网关节点本地缓存，保证多节点缓存一致
+          - 缓存 fail-closed 语义：回源失败退避重试而非放行，配合超管降级通道兼顾安全与可修复性
+          - 权限收回差异化分派：改角色覆盖账号级会话快照即时生效、用户禁用 / 删除强制下线
+          - 角色 / 菜单授权叠加团队归属维度（多租户），统一从登录态取团队 ID 过滤，杜绝漏条件越权
+          - 网关过滤器按路径反查操作描述 + traceId 透传，实现 100% 全接口操作审计，已在组内复用
+          - 通用异步导出框架：策略 / 模板模式 + 启动期全覆盖校验快速失败，新场景接入效率提升 70%+
+          - 扩展 BaseMapper 封装统一分页，排序走字段白名单，杜绝任意列排序与 ORDER BY 注入
+          - 调度中心基于 Quartz，Spring Bean 方法注册任务，支持并发策略、misfire 策略与下次触发时间预览
+          - 主导对接客户 OA 审批中心，封装 OaClient 屏蔽接口细节，MQ 异步回执实现跨系统最终一致
+
+
+
+
+
+  - title: 工作经历
+    layout: list
+    content:
+      - layout: left
+        title: 中智信通科技服务（广东）有限公司
+        sub_title: Java 开发工程师
+        caption: 2026.01 - 2026.08
+        quote: >
+          航司信息化项目签约主体，2023.09 - 2026.08 持续服务国内三大航之一，签约主体随客户采购框架调整变更。
+        description: |
+          - 持续负责航司问卷投放平台的架构演进、性能优化与数据合规建设（详见「项目经验」）
+          - 沉淀通用异步导出框架、零侵入审计组件等通用能力，已在组内复用
+
+      - layout: left
+        title: 东软集团股份有限公司
+        sub_title: Java 开发工程师
+        caption: 2025.03 - 2025.12
+        quote: >
+          同一航司信息化项目的签约主体之一，因客户采购框架调整导致的主体变更。
+        description: |
+          - 持续负责航司问卷投放平台的架构演进、性能优化与数据合规建设（详见「项目经验」）
+
+      - layout: left
+        title: 越亮传奇科技股份有限公司
+        sub_title: Java 开发工程师
+        caption: 2023.09 - 2025.02
+        quote: >
+          同一航司信息化项目的首个签约主体，项目自此启动并持续迭代至今。
+        description: |
+          - 持续负责航司问卷投放平台的架构演进、性能优化与数据合规建设（详见「项目经验」）
+
+      - layout: left
+        title: 长沙远游网络科技有限公司
+        sub_title: Java 开发工程师
+        caption: 2021.03 - 2023.08
+        quote: >
+          Java 后端开发，参与公司业务系统的开发与维护。
+
+
+
+
+
+  - title: 教育背景
+    collapsed: true
+    layout: list
+    content:
+      - layout: left
+        title: 贵州理工学院
+        sub_title: 网络工程 · 本科
+        caption: 2016 - 2020
+        quote: >
+          一句话补充（奖学金、竞赛等）
+        description: |
+          在校期间的补充经历，如 ACM 竞赛、实验室项目等
+
+
+
+
 
 # ============================================================
 # 页脚
 # ============================================================
 
-# 底部显示 "References on request"
-footer_show_references: true
+# 页脚：最后更新的年月，如「更新于 2026-09」（每次部署自动更新）
+# 不想显示整行就改成 false
+# 前缀文字，默认 "更新于"；写空字符串就只留日期
+footer_show_updated: true
+footer_updated_label: "更新于"
 
-# 访问统计（可选，需要自己去 Google Analytics / Tag Manager 申请 ID）
-# 只用其中一个，同时开会互相干扰
-# gtag: "G-XXXXXXXXXX"
 
 # ============================================================
 # 构建设置 —— 以下不要动
 # ============================================================
-
-# 主题文件已全部复制到本地 _sass/_layouts/_includes，不再需要远程主题
-# remote_theme: sproogen/resume-theme
 
 sass:
   sass_dir: _sass
   style: compressed
 
 plugins:
- - jekyll-seo-tag
+  - jekyll-seo-tag

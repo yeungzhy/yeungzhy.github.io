@@ -1,13 +1,14 @@
 <div class="container intro-container">
-  <h3 id="{{ site.about_title | slugify | default: 'about-me' }}">{{ site.about_title | default:
-  "About Me" }}</h3>
+  {%- comment -%}
+    「个人总结」：标题 + 正文，纯文本块。
+
+    这里原本还有一列头像（点标题可折叠），头像已经挪到页头跟姓名排在一起
+    （见 _includes/header.html），所以这一块不再需要折叠按钮，也不再有
+    data-collapse-key="about" —— 没有可藏的东西时不该留一个点了没反应的控件。
+  {%- endcomment -%}
+  <h3 id="{{ site.about_title | slugify | default: 'about-me' }}">{{ site.about_title | default: "About Me" }}</h3>
   <div class="row clearfix">
-    {%- if site.about_profile_image -%}
-      <div class="col-xs-12 col-sm-4 col-md-3 no-print">
-        <span class="profile-img" style="background-image: url({{ site.about_profile_image | relative_url }})"></span>
-      </div>
-    {%- endif -%}
-    <div class="{{ 'col-xs-12 ' }}{%- if site.about_profile_image -%}col-sm-8 col-md-9 col-print-12{%- endif -%}">
+    <div class="about-text col-xs-12">
       {{ site.about_content | strip | markdownify }}
     </div>
   </div>
