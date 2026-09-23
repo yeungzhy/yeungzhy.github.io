@@ -3,9 +3,14 @@
 # ============================================================
 
 # TODO: 改成你自己的「GitHub 用户名/仓库名」
-# 例如仓库叫 zhangsan.github.io，用户名是 zhangsan，就写：zhangsan/zhangsan.github.io
 # 这个值只用于页面右上角显示 "View on GitHub"，填错不影响页面渲染
-repository: yeungzhy/yeungzhy.github.io
+# 当前仓库是 yeungzhy/yeungzhy，所以写 yeungzhy/yeungzhy
+repository: yeungzhy/yeungzhy
+
+# 如果仓库名改成了 yeungzhy.github.io，下面这行就不用动（留空即可）
+# 如果保持仓库名 yeungzhy，网站地址会是 https://yeungzhy.github.io/yeungzhy/
+# 那么必须取消下面这行注释，否则字体和图标会 404：
+# baseurl: "/yeungzhy"
 
 # favicon（已换成你提供的那套，文件在 images/favicon/ 下，一般不用再改）
 favicon: images/favicon/favicon.ico

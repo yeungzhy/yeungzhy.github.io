@@ -1,15 +1,19 @@
+---
+# 空 front matter：让 Jekyll 解析这个文件里的 Liquid
+# 这样才能用 relative_url，仓库叫 xxx.github.io 或 yeungzhy 都能正确拼出路径
+---
 {
   "name": "yeungzhy · 在线简历",
   "short_name": "简历",
   "icons": [
     {
-      "src": "/images/favicon/web-app-manifest-192x192.png",
+      "src": "{{ '/images/favicon/web-app-manifest-192x192.png' | relative_url }}",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/images/favicon/web-app-manifest-512x512.png",
+      "src": "{{ '/images/favicon/web-app-manifest-512x512.png' | relative_url }}",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
