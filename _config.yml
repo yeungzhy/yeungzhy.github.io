@@ -1,0 +1,216 @@
+# ============================================================
+# 站点信息
+# ============================================================
+
+# TODO: 改成你自己的「GitHub 用户名/仓库名」
+# 例如仓库叫 zhangsan.github.io，用户名是 zhangsan，就写：zhangsan/zhangsan.github.io
+# 这个值只用于页面右上角显示 "View on GitHub"，填错不影响页面渲染
+repository: yeungzhy/yeungzhy.github.io
+
+# favicon（已换成你提供的那套，文件在 images/favicon/ 下，一般不用再改）
+favicon: images/favicon/favicon.ico
+
+# 内容配置版本，必须保持 2（新版写法），不要改
+version: 2
+
+# ============================================================
+# 个人信息
+# ============================================================
+
+# TODO: 基本必填
+name: 张三
+title: 高级 Java 后端工程师 · 6 年经验
+email: zhangsan@example.com
+
+# 网站/博客（可选，留着注释就不显示）
+website: https://yeungzhy.github.io
+
+# 手机号：公开页面上不建议暴露，默认注释掉
+# 如果确实要放，取消下面这行注释并改成你的号码
+# phone: 138-0000-0000
+
+# 暗色模式：true=强制暗色 / false=跟随系统 / never=永远不用暗色
+darkmode: false
+
+# ============================================================
+# 社交账号（只填用户名，不要填完整 URL；留着注释就不显示该图标）
+# ============================================================
+
+github_username: yeungzhy
+linkedin_username: yeungzhy
+# stackoverflow_username: "00000001"
+# twitter_username: your-twitter-name
+# instagram_username: your-instagram-name
+# youtube_username: your-youtube-name
+# zhihu / 掘金 / 公众号等没有内置图标，用下面的 additional_links 加
+
+# 自定义图标链接（博客、掘金、Gitee 等）
+# icon 名称从 https://fontawesome.com/search?m=free 搜，用 fas fa-xxx 或 fab fa-xxx
+# TODO: 按需增删
+additional_links:
+- title: 技术博客
+  icon: fas fa-blog
+  url: https://your-blog.com
+- title: 掘金
+  icon: fas fa-feather
+  url: https://juejin.cn/user/xxxx
+# - title: Gitee
+#   icon: fab fa-git-alt
+#   url: https://gitee.com/your-name
+
+# ============================================================
+# 关于我（顶部简介）
+# ============================================================
+
+# TODO: 换成你自己的照片，文件名保持 images/profile.jpg 即可
+about_profile_image: images/profile.jpg
+
+# TODO: 改这段。<mark>xxx</mark> 会显示成高亮标签，用来突出关键词
+about_content: | # 这个竖线表示保留换行，可以写多段，支持 Markdown
+  6 年 Java 后端开发经验，专注高并发系统设计与微服务架构落地。主导过多个从 0 到 1 的项目，也扛过日均千万级请求的线上系统重构。
+
+  最擅长的技术方向： <mark>Java / Spring Cloud</mark> 、 <mark>高并发与性能优化</mark> 、 <mark>分布式与中间件</mark>
+
+# ============================================================
+# 简历正文
+# 每一段以 "- title:" 开头，layout 有两类：
+#   list = 条目式（适合工作经历 / 项目 / 教育）
+#   text = 纯文本（适合技能清单 / 自我评价）
+# 条目内 layout 可选：left（左对齐）/ right / top-middle（居中）/ top-right
+# ============================================================
+
+content:
+
+  # ---------------------------------------------------------
+  # 1. 工作经历（倒序：最近的写最前面）
+  # ---------------------------------------------------------
+  - title: 工作经历
+    layout: list
+    content:
+      - layout: left
+        title: TODO 公司名 A
+        sub_title: 高级 Java 后端工程师
+        caption: 2022.03 - 至今
+        link: https://company-a.com
+        # link_text: 公司官网（不填则直接显示网址）
+        quote: >
+          一句话说明这家公司是做什么的、你在其中的定位。
+        description: | # 用 | 保留换行，可以写多个 bullet
+          - 负责 XXX 核心系统的设计与开发，支撑日均 XX 万订单 / XX 万 QPS
+          - 主导 XX 系统重构，接口 P99 从 XXXms 降到 XXms，机器成本下降 XX%
+          - 搭建 XX 中间件 / 平台，被 N 个业务线复用，接入方超过 X 个
+          - 带 X 人小组，负责需求拆分、Code Review 与线上稳定性保障
+
+      - layout: left
+        title: TODO 公司名 B
+        sub_title: Java 后端工程师
+        caption: 2019.07 - 2022.02
+        quote: >
+          一句话介绍公司 / 业务。
+        description: |
+          - 参与 XX 平台后端开发，独立完成 XX 模块从设计到上线
+          - 优化 XX 慢查询，将 XX 接口响应时间从 XX 降至 XX
+          - 引入 XX 组件（如 MQ / Redis / ES）解决 XX 问题
+
+  # ---------------------------------------------------------
+  # 2. 项目经验（挑 2~3 个最能打的，写清楚"你做了什么 + 结果如何"）
+  # ---------------------------------------------------------
+  - title: 项目经验
+    layout: list
+    content:
+      - layout: left
+        title: TODO 项目名 A
+        sub_title: 后端负责人
+        caption: 2023.05 - 2023.12
+        additional_links:
+          - title:  GitHub 开源地址
+            icon: fab fa-github
+            url: https://github.com/your-github-name/project-a
+        quote: >
+          一句话说清这个项目解决什么问题。
+        description: |
+          技术栈：Spring Boot / MySQL / Redis / RocketMQ / XX
+
+          - 设计 XX 方案，解决 XX 问题
+          - 通过 XX 手段将 XX 指标提升 XX%
+          - 踩坑与解法：（可选，写 1 条能体现深度的）
+
+      - layout: left
+        title: TODO 项目名 B
+        sub_title: 核心开发
+        caption: 2021.03 - 2021.09
+        quote: >
+          一句话说清这个项目解决什么问题。
+        description: |
+          技术栈：XX
+
+          - 负责 XX 模块
+          - 实现 XX 能力
+
+  # ---------------------------------------------------------
+  # 3. 专业技能（text 布局，直接用 Markdown 写）
+  # ---------------------------------------------------------
+  - title: 专业技能
+    layout: text
+    content: | # 这里整体是 Markdown，随便排版
+      **Java / JVM**：熟悉并发编程、JVM 调优、GC 原理与常见排障手段
+
+      **框架**：Spring Boot / Spring Cloud / MyBatis / Dubbo，读过部分核心源码
+
+      **中间件**：MySQL（索引、事务、慢查询优化）、Redis（缓存设计、分布式锁）、RocketMQ / Kafka
+
+      **分布式**：熟悉分布式事务、限流降级、链路追踪、分库分表方案
+
+      **工程能力**：Docker / Kubernetes 基础、CI/CD、Linux 常用命令与线上排查
+
+      **其他**：Python / Shell（日常脚本）、前端基础（HTML / CSS / JS，可独立完成简单页面）
+
+  # ---------------------------------------------------------
+  # 4. 教育背景
+  # ---------------------------------------------------------
+  - title: 教育背景
+    layout: list
+    content:
+      - layout: left
+        title: TODO 学校名
+        sub_title: 计算机科学与技术 · 本科
+        caption: 2015 - 2019
+        # quote: >
+        #   一句话补充（奖学金、竞赛等）
+        # description: |
+        #   在校期间的补充经历，如 ACM 竞赛、实验室项目等
+
+  # ---------------------------------------------------------
+  # 5. 其他（兴趣爱好 / 证书 / 开源贡献，不想要就整段删掉）
+  # ---------------------------------------------------------
+  - title: 关于我的更多
+    layout: text
+    content: |
+      - 坚持写技术博客 X 年，累计 XX 篇，XX 万阅读
+      - GitHub 有 XX 个开源项目，累计 XX star
+      - 证书：XXX（如 AWS 解决方案架构师、阿里云 ACE 等）
+      - 爱好：XX / XX / XX
+
+# ============================================================
+# 页脚
+# ============================================================
+
+# 底部显示 "References on request"
+footer_show_references: true
+
+# 访问统计（可选，需要自己去 Google Analytics / Tag Manager 申请 ID）
+# 只用其中一个，同时开会互相干扰
+# gtag: "G-XXXXXXXXXX"
+
+# ============================================================
+# 构建设置 —— 以下不要动
+# ============================================================
+
+remote_theme: sproogen/resume-theme
+
+sass:
+  sass_dir: _sass
+  style: compressed
+
+plugins:
+ - jekyll-seo-tag

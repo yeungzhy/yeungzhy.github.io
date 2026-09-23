@@ -1,0 +1,97 @@
+---
+# Front matter comment to ensure Jekyll properly reads file.
+---
+
+/* ============================================================
+   1. 本地字体：Maple Mono（已放在 assets/fonts/，不经过任何 CDN）
+      font-display: swap = 字体没下载完时先用系统字体顶上，不会白屏
+   ============================================================ */
+
+@font-face {
+  font-family: 'Maple Mono';
+  src: url('/assets/fonts/MapleMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Maple Mono';
+  src: url('/assets/fonts/MapleMono-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Maple Mono';
+  src: url('/assets/fonts/MapleMono-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Maple Mono';
+  src: url('/assets/fonts/MapleMono-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Maple Mono';
+  src: url('/assets/fonts/MapleMono-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Maple Mono';
+  src: url('/assets/fonts/MapleMono-BoldItalic.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ============================================================
+   2. 主题原样式（这行必须保留）
+   ============================================================ */
+
+@import 'modern-resume-theme';
+
+/* ============================================================
+   3. 自定义样式：写在 @import 下面，同优先级时后者覆盖前者
+   ============================================================ */
+
+/* 全局字体已在 _sass/type.scss 里改成 Maple Mono（从源头改掉 Roboto）。
+   注意：Maple Mono 是等宽编程字体，中文也会用它渲染，整体偏"终端/极客"风。
+   如果觉得正文不好读，去 _sass/type.scss 把 font-family 换成这行即可：
+     -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+   */
+
+/* 代码/技术栈相关片段保持等宽（Maple Mono 本身就是等宽，这里只为保险） */
+code, pre, kbd, samp {
+  font-family: 'Maple Mono', ui-monospace, Menlo, Consolas, monospace;
+}
+
+/* ---- 下面是可选的微调，取消注释即可生效 ---- */
+
+/* 字号整体调大一点（等宽字体视觉上偏小） */
+/*
+body {
+  font-size: 15px;
+  line-height: 1.75;
+}
+*/
+
+/* 正文宽度调宽（主题默认较窄，等宽字体会更显拥挤） */
+/*
+.main-content {
+  max-width: 900px;
+}
+*/
+
+/* 去掉卡片阴影，改扁平风 */
+/*
+.card {
+  box-shadow: none;
+  border: 1px solid #e5e5e5;
+}
+*/
