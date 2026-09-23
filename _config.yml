@@ -66,7 +66,7 @@ additional_links:
 # ============================================================
 
 # TODO: 换成你自己的照片，文件名保持 images/profile.jpg 即可
-about_profile_image: images/profile.jpg
+about_profile_image: images/profile.png
 
 # TODO: 改这段。<mark>xxx</mark> 会显示成高亮标签，用来突出关键词
 about_content: | # 这个竖线表示保留换行，可以写多段，支持 Markdown
