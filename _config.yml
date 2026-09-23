@@ -17,7 +17,7 @@ name: 张三
 
 # 页头姓名下面那行关键词（职位 / 一句话标签），字号比姓名小一档。
 # 不想要这一行就留空 ""，或整行注释掉
-title: Java 后端工程师 & 乐于助人
+title: Java 后端工程师
 
 # 页头姓名左侧的圆形头像。整行注释掉就不显示头像，姓名照常左对齐，
 # 点姓名可以收起 / 展开它（和其它 section 一样会记住选择）。
@@ -48,8 +48,8 @@ github_username: yeungzhy
 additional_links:
   - title: 飞书
     url: https://my.feishu.cn/wiki/HU7Cw4GWYi4D5WkKUamc2ceGn5e
-  - title: Gitee
-    url: https://gitee.com/your-name
+  # - title: Gitee
+  #   url: https://gitee.com/your-name
 
 # ============================================================
 # 关于我（顶部简介）

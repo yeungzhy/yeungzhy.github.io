@@ -175,9 +175,47 @@ body {
 }
 
 @media print {
-  /* 一条经历不跨页截断；比一页还长的条目浏览器会自动忽略这条 */
+  /* 页头那 50px 的顶部留白是给屏幕上「窗口顶边」用的；纸上页边距由上面的
+     @page 统一给，再留一次就是白扔一行的高度。 */
+  .header-container {
+    margin-top: 0;
+  }
+
+  /* 分页：条目本身允许跨页，但「标题 → 副标题 → 简介 → 正文」不许被拆散，
+     单个 bullet 也不许被拦腰切开。
+
+     为什么不再整条 avoid：一条经历动辄 9~10 个 bullet，高度常超过一页的
+     60%，整条锁死之后剩余空间谁也进不来 —— 实测四页里三页底部空 88~127mm，
+     等于白扔一页多纸。改成「允跨页 + 保护标题与 bullet」后同样内容排三页，
+     且没有一行被切在半截。
+     想恢复「一条经历绝不跨页」：把 .resume-item 改回 break-inside: avoid。 */
   .resume-item {
+    break-inside: auto;
+  }
+
+  .item-head,
+  .item-subtitle,
+  .quote {
+    break-after: avoid;
+  }
+
+  li {
     break-inside: avoid;
+  }
+
+  /* <mark> 高亮（_sass/type.scss 的「深底白字」）在纸上的还原。
+
+     两件事都会把它抹掉，且屏幕上完全看不出来：
+       ① Bootstrap 3 的打印块有 `*{color:#000!important;background:0 0!important}`
+          —— 深底被清成透明、白字被改成黑字，高亮块退化成普通正文；
+       ② 浏览器打印对话框的「背景图形」默认不勾，背景色本来就不输出。
+     !important 同时压过 Bootstrap 和本主题的 .dark mark（暗色下 mark 是
+     反色的）；print-color-adjust 则让背景在「背景图形」未勾选时照样输出。 */
+  mark {
+    color: #fff !important;
+    background-color: #333 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
   a[href]:after {

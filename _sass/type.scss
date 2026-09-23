@@ -3,9 +3,14 @@ body {
   font-family: 'Maple Mono', -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
   font-size: 1rem;
   line-height: 1.5;
+}
 
-  @media print {
-    font-size: 0.9rem;
+@media print {
+  /* 中文夹拉丁字母 / 数字时，两端对齐会把标点两侧撑出空隙
+     （导出 PDF 里「通用组件 ， 习惯」这种缝很明显）。纸上改左对齐。 */
+  p,
+  ul {
+    text-align: left;
   }
 }
 
